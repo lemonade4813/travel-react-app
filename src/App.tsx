@@ -1,57 +1,74 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import styled from 'styled-components';
+import {BrowserRouter, Routes, Route, NavLink} from 'react-router-dom'
+import Flight from './components/Flight/Flight';
+import Hotel from './components/Hotel';
+import Restaurant from './components/Restaurant';
+const AppDiv= styled.div`
+  text-align : center;
+`
+const MainNav = styled.div`
+  background: #ff98a3;
+  width: 100%;
+  height : 70px;
+  display: flex;
+  align-items : center;
+  justify-content: space-around;
+  color: white;
+  padding: 20px;
+  font-weight: 500;
+  font-size: 20px;
+  box-sizing: border-box;
+`
+
+const LogoName = styled.div`
+  font-family: var(--font-geminiMoon);
+  font-size: 40px;
+  width: 300px;
+  margin: 15px;
+`
+const NavStyle = styled(NavLink)`
+  color: white;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: var(--font-notoSansKRLight);
+  border-right : 1px solid white;
+
+  margin: 5px;
+  outline: invert;
+  &:link {
+    transition : 0.3s;
+    text-decoration: none;
+  }
+  &:hover {
+  }
+  &.active {
+    color: #ff98a3;
+    position: relative;
+    background-color:white;
+    padding : 17px;
+    border-right : 6px solid #ff6347;
+  }
+`
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <AppDiv>
+    <BrowserRouter>
+      <MainNav>
+        <LogoName>Carpe Diem</LogoName>
+        <NavStyle to='/'>항공권 예약</NavStyle>
+        <NavStyle to='/hotel'>호텔 예약</NavStyle>
+        <NavStyle to='/restaurant'>식당 예약</NavStyle>
+      </MainNav>
+      <Routes>
+        <Route path='/' element={<Flight/>} />
+        <Route path='/hotel' element={<Hotel/>} />
+        <Route path='/restaurant' element={<Restaurant/>} />
+      </Routes>
+    </BrowserRouter>
+  </AppDiv>
   );
 }
 
