@@ -105,12 +105,17 @@ export default function Flight(){
         <>
             <button onClick={fetchData}>실행</button>
             <SelectBox 
-            changeDepartCountry = {changeDepartCountry} 
-            changeDepartIataCode = {changeDepartIataCode} 
-            arriveCountry = {searchFlightOption.arriveCountry} 
-            changeArriveCountry = {changeArriveCountry}
-            changeArriveIataCode = {changeArriveIataCode}
-            departCountry = {searchFlightOption.departCountry}/>
+            changeCountry = {changeDepartCountry} 
+            changeIataCode = {changeDepartIataCode} 
+            country = {searchFlightOption.departCountry}
+            depart/>
+
+            <SelectBox
+            changeCountry = {changeArriveCountry}
+            changeIataCode = {changeArriveIataCode}
+            country = {searchFlightOption.arriveCountry} 
+            arrive/>
+            
             <FlightData flightData = {flightData} />
             <FlightDataSegments flightDataSegments = {flightDataSegments} />
         </>

@@ -1,10 +1,10 @@
 import {filghtListType} from "../../type/Flight/filghtListType"
 
-import * as style from "../../style/style"
+import {Table, Thead, Tr, Td}  from "../../style/tableStyle"
 
 import styled from "styled-components"
 
-const FilghtDataSegmentTable = styled(style.Table)`
+const FilghtDataSegmentTable = styled(Table)`
 height : 100px;
 width : 800px;
 `
@@ -15,14 +15,14 @@ const FlightDataSegments = (props: any) => {
 
     return (
         <FilghtDataSegmentTable>
-            <style.Thead>
+            <Thead>
                 <tr>
                     <th>출발공항코드</th>
                     <th>출발시간</th>
                     <th>도착공항코드</th>
                     <th>도착시간</th>
                 </tr>
-            </style.Thead>
+            </Thead>
             <tbody>
                 {props.flightDataSegments.map((segment:any, index:any) : any => (
                <tr key={index}>
