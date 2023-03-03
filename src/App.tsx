@@ -4,6 +4,7 @@ import Flight from './components/Flight/Flight';
 import Hotel from './components/Hotel';
 import Restaurant from './components/Restaurant';
 const AppDiv= styled.div`
+  font-family: var(--font-notoSansKRLight);
   text-align : center;
 `
 const MainNav = styled.div`

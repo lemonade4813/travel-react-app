@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react"
-import SelectBox from "../../utils/SelectBox"
+import SelectBox from "../../utils/selectBox"
 import FlightData from "./FlightData"
 import FlightDataSegments from "./FlightDataSegments"
 import {selectFlightOptionsType} from "./type"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/locale"
+import styled from "styled-components"
+import { stringify } from "querystring"
+
+const FlightDiv = styled.div`
+    display : flex;
+    flex-diection : row;
+    justify-content : center;
+    align-items : center;
+`
 
 export default function Flight(){
 
@@ -13,7 +25,9 @@ export default function Flight(){
     const[flightData, setFlightData] = useState<any>([])
     const[flightDataSegments, setFlightDataSegments] = useState<Array<any>>([])
     const[searchFlightOption, setSearchFlightOption] = useState<selectFlightOptionsType>({
-        departCountry : "", departIataCode : "", arriveCountry : "", arriveIataCode : ""}) 
+        departCountry : "", departIataCode : "", arriveCountry : "", arriveIataCode : "", checkedFlightDate: null
+        , personNumber : ""
+    }) 
 
 
     const changeDepartCountry = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +46,16 @@ export default function Flight(){
         setSearchFlightOption({...searchFlightOption, arriveIataCode: e.target.value})
 	}
 
+    const changeFlightDate = (date : Date | null) => {
+
+        setSearchFlightOption({...searchFlightOption, checkedFlightDate : date})
+    }
+
+    const changePersonNumber = (e : React.ChangeEvent<HTMLSelectElement>) =>{
+        setSearchFlightOption({...searchFlightOption, personNumber : e.target.value})
+    }
+
+    console.log(searchFlightOption)
 
 
     const fetchAuthData = async () : Promise<string|undefined> => {
@@ -70,7 +94,10 @@ export default function Flight(){
                     token = accessToken;
             }
 
-            fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${searchFlightOption.departIataCode}&destinationLocationCode=${searchFlightOption.arriveIataCode}&departureDate=2023-05-02&adults=1&max=1`,
+            const url = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${searchFlightOption.departIataCode}&destinationLocationCode=${searchFlightOption.arriveIataCode}&departureDate=${dateToString(searchFlightOption.checkedFlightDate)}&adults=${searchFlightOption.personNumber}&nonStop=false&max=250`
+            alert(url)
+            console.log(url)
+            fetch(url,
             {
               headers: {
                 Authorization: `Bearer ${token}`
@@ -81,6 +108,7 @@ export default function Flight(){
                 }
                 return res.json()})
             .then((data)=>{
+                console.log(data)
                 const {oneWay, lastTicketingDate, numberOfBookableSeats} = data.data[0]
                 const flightData = {oneWay, lastTicketingDate, numberOfBookableSeats}
                 console.log("flightData : " + JSON.stringify(flightData))   // response 한 api 값 확인
@@ -101,21 +129,72 @@ export default function Flight(){
             })
         }
 
+    const dateToString = (date : Date | null) => {
+
+        let fullYear : number
+        let month : number
+        let day : number
+
+        if(typeof date?.getFullYear() === 'undefined' ||  typeof date?.getMonth() ==='undefined' || typeof date?.getDay() === 'undefined'){
+
+            const newDate = new Date()
+            fullYear = newDate.getFullYear()
+            month = newDate.getMonth() + 1
+            day = newDate.getDay()
+
+            return fullYear + '-' + month.toString().padStart(2, '0')+ '-' + day.toString().padStart(2, '0')
+            
+        }    
+     
+        else{
+            return date.getFullYear() + '-' + (date.getMonth()+1).toString().padStart(2, '0')+ '-' + date.getDate().toString().padStart(2, '0')
+        }
+    
+    }
+
+    console.log(dateToString(searchFlightOption.checkedFlightDate))
+
+
     return(
         <>
-            <button onClick={fetchData}>실행</button>
-            <SelectBox 
-            changeCountry = {changeDepartCountry} 
-            changeIataCode = {changeDepartIataCode} 
-            country = {searchFlightOption.departCountry}
-            depart/>
+            <FlightDiv>
+                <div>
+                    <p>국가/공항 선택</p><SelectBox 
+                    changeCountry = {changeDepartCountry} 
+                    changeIataCode = {changeDepartIataCode} 
+                    country = {searchFlightOption.departCountry}
+                    depart/>
 
-            <SelectBox
-            changeCountry = {changeArriveCountry}
-            changeIataCode = {changeArriveIataCode}
-            country = {searchFlightOption.arriveCountry} 
-            arrive/>
-            
+                    <SelectBox
+                    changeCountry = {changeArriveCountry}
+                    changeIataCode = {changeArriveIataCode}
+                    country = {searchFlightOption.arriveCountry} 
+                    arrive/>
+                </div>
+                <div>
+                    <p>예약 날짜 선택</p>
+                    <DatePicker
+                    locale={ko} 
+                    dateFormat="yyyy-MM-dd"
+                    className="input-datepicker"
+                    minDate={new Date()}
+                    closeOnScroll={true}
+                    placeholderText="예약 날짜 선택"
+                    selected={searchFlightOption.checkedFlightDate}
+                    onChange={(date)=> changeFlightDate(date)}/>
+                </div>
+                <div>
+                    <label>탑승 인원</label>
+                    <select onChange={changePersonNumber}>
+                        <option>===선택하세요===</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+
+                <button onClick={fetchData}>실행</button>
+                </FlightDiv>
             <FlightData flightData = {flightData} />
             <FlightDataSegments flightDataSegments = {flightDataSegments} />
         </>
