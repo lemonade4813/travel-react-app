@@ -1731,7 +1731,7 @@ export const airportLists = [
 {"code":"STV","name":"Surat","country":"India"},
 {"code":"SUV","name":"Suva - Nausori name (Luvuluvu)","country":"Fiji"},
 {"code":"SWP","name":"Swakopmund","country":"Namibia"},
-{"code":"SYD","name":"Sydney - Sydney name","country":"Australia"},
+{"code":"SYD","name":"Sydney","country":"Australia"},
 {"code":"ZYL","name":"Sylhet","country":"Bangladesh"},
 {"code":"SYR","name":"Syracuse (NY)","country":"USA"},
 {"code":"TUU","name":"Tabuk","country":"Saudi Arabia"},

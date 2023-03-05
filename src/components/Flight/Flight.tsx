@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import SelectBox from "../../utils/selectBox"
 import FlightData from "./FlightData"
 import FlightDataSegments from "./FlightDataSegments"
@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale"
 import styled from "styled-components"
-import { stringify } from "querystring"
+
 
 const FlightDiv = styled.div`
     display : flex;
@@ -16,44 +16,56 @@ const FlightDiv = styled.div`
     align-items : center;
 `
 
+const FlightInfoDiv = styled(FlightDiv)`
+
+    margin : 0px auto;
+    width : 80%;
+    padding : 15px; 
+    border : 3px #99ccff solid;
+    margin-top : 40px;
+    margin-bottom : 40px;
+    border-radius : 10px;
+
+`
+
 export default function Flight(){
 
     const AMADEUS_API_ID = "obCv6RoAxEq0IdbHANdGncCabaugPCwU"
     const AMADEUS_API_KEY = "DDOBeUcEConOZYQG"
 
     const[accessToken, setAccessToken] = useState<string|undefined>('')
-    const[flightData, setFlightData] = useState<any>([])
-    const[flightDataSegments, setFlightDataSegments] = useState<Array<any>>([])
+    const[flightResponseData, setFlightResponseData] = useState<any>([])
+    // const[flightData, setFlightData] = useState<any>([])
+    // const[flightDataSegments, setFlightDataSegments] = useState<Array<any>>([])
     const[searchFlightOption, setSearchFlightOption] = useState<selectFlightOptionsType>({
         departCountry : "", departIataCode : "", arriveCountry : "", arriveIataCode : "", checkedFlightDate: null
         , personNumber : ""
     }) 
 
+    const changeDepartCountry = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchFlightOption(prevState => ({...prevState, departCountry : e.target.value}))
+    },[])
 
-    const changeDepartCountry = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption({...searchFlightOption, departCountry : e.target.value})
-    }
+    const changeDepartIataCode  = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchFlightOption(prevState => ({...prevState, departIataCode: e.target.value}))
+	},[])
 
-    const changeDepartIataCode  = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption({...searchFlightOption, departIataCode: e.target.value})
-	}
+    const changeArriveCountry = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchFlightOption(prevState => ({...prevState, arriveCountry : e.target.value}))
+    },[])
 
-    const changeArriveCountry = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption({...searchFlightOption, arriveCountry : e.target.value})
-    }
+    const changeArriveIataCode  = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchFlightOption(prevState => ({...prevState, arriveIataCode: e.target.value}))
+	},[])
 
-    const changeArriveIataCode  = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption({...searchFlightOption, arriveIataCode: e.target.value})
-	}
+    const changeFlightDate = useCallback((date : Date | null) => {
 
-    const changeFlightDate = (date : Date | null) => {
+        setSearchFlightOption(prevState => ({...prevState, checkedFlightDate : date}))
+    },[])
 
-        setSearchFlightOption({...searchFlightOption, checkedFlightDate : date})
-    }
-
-    const changePersonNumber = (e : React.ChangeEvent<HTMLSelectElement>) =>{
-        setSearchFlightOption({...searchFlightOption, personNumber : e.target.value})
-    }
+    const changePersonNumber =useCallback((e : React.ChangeEvent<HTMLSelectElement>) =>{
+        setSearchFlightOption(prevState => ({...prevState, personNumber : e.target.value}))
+    },[])
 
     console.log(searchFlightOption)
 
@@ -108,16 +120,18 @@ export default function Flight(){
                 }
                 return res.json()})
             .then((data)=>{
-                console.log(data)
-                const {oneWay, lastTicketingDate, numberOfBookableSeats} = data.data[0]
-                const flightData = {oneWay, lastTicketingDate, numberOfBookableSeats}
-                console.log("flightData : " + JSON.stringify(flightData))   // response 한 api 값 확인
-                setFlightData(flightData)                                   // flightData state에 값 설정
-                console.log("flightDataState : " + JSON.stringify(flightData)) //설정한 state값 확인
-                console.log("flightDataSegments :" + JSON.stringify(data.data[0].itineraries[0].segments)) // response 한 api 값 확인
-                setFlightDataSegments(data.data[0].itineraries[0].segments) // flightDataSegments state에 값 설정
-                console.log("flightDataSegmentsState : " + JSON.stringify(flightData)) //설정한 state값 확인
+                // console.log(data)
+                // const {oneWay, lastTicketingDate, numberOfBookableSeats} = data.data[0]
+                // const flightData = {oneWay, lastTicketingDate, numberOfBookableSeats}
+                // console.log("flightData : " + JSON.stringify(flightData))   // response 한 api 값 확인
+                // setFlightData(flightData)                                   // flightData state에 값 설정
+                // console.log("flightDataState : " + JSON.stringify(flightData)) //설정한 state값 확인
+                // console.log("flightDataSegments :" + JSON.stringify(data.data[0].itineraries[0].segments)) // response 한 api 값 확인
+                // setFlightDataSegments(data.data[0].itineraries[0].segments) // flightDataSegments state에 값 설정
+                // console.log("flightDataSegmentsState : " + JSON.stringify(flightData)) //설정한 state값 확인
 
+                setFlightResponseData(data.data)
+                
                 setAccessToken(token)
                 console.log("token" + token)
                 console.log(`tokenState: ${accessToken}`)
@@ -154,6 +168,26 @@ export default function Flight(){
 
     console.log(dateToString(searchFlightOption.checkedFlightDate))
 
+
+    const flightInfo = useMemo(
+        ()=>
+        flightResponseData.map((response : any, index : number)=>{
+
+          const {oneWay, lastTicketingDate, numberOfBookableSeats} = response
+          const flightData = {oneWay, lastTicketingDate, numberOfBookableSeats}
+          const flightDataSegments = response.itineraries[0].segments 
+                            
+        return(    
+            <>
+                <p>검색결과 {index+1}</p>
+                <FlightInfoDiv>
+                    <FlightData flightData = {flightData} />
+                    <FlightDataSegments flightDataSegments = {flightDataSegments} />
+                </FlightInfoDiv>    
+            </>
+        )
+
+    }),[flightResponseData])
 
     return(
         <>
@@ -192,11 +226,9 @@ export default function Flight(){
                         <option value="3">3</option>
                     </select>
                 </div>
-
                 <button onClick={fetchData}>실행</button>
                 </FlightDiv>
-            <FlightData flightData = {flightData} />
-            <FlightDataSegments flightDataSegments = {flightDataSegments} />
+            {flightInfo}
         </>
     )
 
