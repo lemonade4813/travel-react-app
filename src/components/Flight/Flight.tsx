@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import SelectBox from "../../utils/selectBox"
+import FlightSelectBox from "../../utils/FlightSelectBox"
 import FlightData from "./FlightData"
 import FlightDataSegments from "./FlightDataSegments"
 import {selectFlightOptionsType} from "./type"
@@ -35,8 +35,7 @@ export default function Flight(){
 
     const[accessToken, setAccessToken] = useState<string|undefined>('')
     const[flightResponseData, setFlightResponseData] = useState<any>([])
-    // const[flightData, setFlightData] = useState<any>([])
-    // const[flightDataSegments, setFlightDataSegments] = useState<Array<any>>([])
+
     const[searchFlightOption, setSearchFlightOption] = useState<selectFlightOptionsType>({
         departCountry : "", departIataCode : "", arriveCountry : "", arriveIataCode : "", checkedFlightDate: null
         , personNumber : ""
@@ -91,8 +90,10 @@ export default function Flight(){
         }
     }
 
-    const fetchData = async () => {
+    const fetchData = async (e : React.FormEvent<HTMLFormElement>) => {
             
+            e.preventDefault();
+
             let token : string | undefined
 
             //state에 저장된 token이 없을 경우 token 정보 가져오는 함수 호출
@@ -120,21 +121,8 @@ export default function Flight(){
                 }
                 return res.json()})
             .then((data)=>{
-                // console.log(data)
-                // const {oneWay, lastTicketingDate, numberOfBookableSeats} = data.data[0]
-                // const flightData = {oneWay, lastTicketingDate, numberOfBookableSeats}
-                // console.log("flightData : " + JSON.stringify(flightData))   // response 한 api 값 확인
-                // setFlightData(flightData)                                   // flightData state에 값 설정
-                // console.log("flightDataState : " + JSON.stringify(flightData)) //설정한 state값 확인
-                // console.log("flightDataSegments :" + JSON.stringify(data.data[0].itineraries[0].segments)) // response 한 api 값 확인
-                // setFlightDataSegments(data.data[0].itineraries[0].segments) // flightDataSegments state에 값 설정
-                // console.log("flightDataSegmentsState : " + JSON.stringify(flightData)) //설정한 state값 확인
-
                 setFlightResponseData(data.data)
-                
                 setAccessToken(token)
-                console.log("token" + token)
-                console.log(`tokenState: ${accessToken}`)
             })
             .catch((err)=>{
                 alert(err.message)
@@ -192,42 +180,44 @@ export default function Flight(){
     return(
         <>
             <FlightDiv>
-                <div>
-                    <p>국가/공항 선택</p><SelectBox 
-                    changeCountry = {changeDepartCountry} 
-                    changeIataCode = {changeDepartIataCode} 
-                    country = {searchFlightOption.departCountry}
-                    depart/>
+                <form onSubmit={fetchData}>
+                    <div>
+                        <p>국가/공항 선택</p>
+                        <FlightSelectBox 
+                        changeCountry = {changeDepartCountry} 
+                        changeIataCode = {changeDepartIataCode} 
+                        country = {searchFlightOption.departCountry}
+                        depart/>
 
-                    <SelectBox
-                    changeCountry = {changeArriveCountry}
-                    changeIataCode = {changeArriveIataCode}
-                    country = {searchFlightOption.arriveCountry} 
-                    arrive/>
-                </div>
-                <div>
-                    <p>예약 날짜 선택</p>
-                    <DatePicker
-                    locale={ko} 
-                    dateFormat="yyyy-MM-dd"
-                    className="input-datepicker"
-                    minDate={new Date()}
-                    closeOnScroll={true}
-                    placeholderText="예약 날짜 선택"
-                    selected={searchFlightOption.checkedFlightDate}
-                    onChange={(date)=> changeFlightDate(date)}/>
-                </div>
-                <div>
-                    <label>탑승 인원</label>
-                    <select onChange={changePersonNumber}>
-                        <option>===선택하세요===</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
-                </div>
-                <button onClick={fetchData}>실행</button>
-                </FlightDiv>
+                        <FlightSelectBox
+                        changeCountry = {changeArriveCountry}
+                        changeIataCode = {changeArriveIataCode}
+                        country = {searchFlightOption.arriveCountry} 
+                        arrive/>
+                    </div>
+                
+                        <p>예약 날짜 선택</p>
+                        <DatePicker
+                        locale={ko} 
+                        dateFormat="yyyy-MM-dd"
+                        className="input-datepicker"
+                        minDate={new Date()}
+                        closeOnScroll={true}
+                        placeholderText="예약 날짜 선택"
+                        selected={searchFlightOption.checkedFlightDate}
+                        onChange={(date)=> changeFlightDate(date)}/>
+                  
+                        <label>탑승 인원</label>
+                        <select onChange={changePersonNumber}>
+                            <option>===선택하세요===</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                  
+                    <button type = "submit">실행</button>
+                </form>
+            </FlightDiv>
             {flightInfo}
         </>
     )

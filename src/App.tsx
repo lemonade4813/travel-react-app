@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import {BrowserRouter, Routes, Route, NavLink} from 'react-router-dom'
 import Flight from './components/Flight/Flight';
-import Hotel from './components/Hotel';
+import Hotel from './components/Hotel/Hotel';
 import Restaurant from './components/Restaurant';
 const AppDiv= styled.div`
   font-family: var(--font-notoSansKRLight);
