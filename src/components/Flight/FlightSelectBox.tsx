@@ -1,21 +1,8 @@
 import styled from "styled-components";
-import { airportLists, countryLists } from "../files/AirportList";
+import { airportLists, countryLists } from "../../files/AirportList";
+import { SelectBoxDiv, Label, Select } from "../../utils/commonStyle";
 
 
-const Label = styled.label`
-	margin : 15px;
-`
-
-const Select = styled.select`
-	width : 250px;
-	height : 30px;
-`
-
-
-const SelectBoxDiv = styled.div`
-	margin-bottom : 10px;
-	margin-right : 20px;
-`
 const flightSelectBox = (props : any) => {
 
 	

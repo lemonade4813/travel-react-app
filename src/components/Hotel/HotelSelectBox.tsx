@@ -1,20 +1,8 @@
 import styled from "styled-components";
-import { cityLists } from "../files/CityCodeList";
+import { cityLists, cityCodeLists } from "../../files/CityCodeList";
 
+import { SelectBoxDiv, Label, Select} from "../../utils/commonStyle";
 
-const Label = styled.label`
-	margin : 15px;
-`
-
-const Select = styled.select`
-	width : 250px;
-	height : 30px;
-`
-
-const SelectBoxDiv = styled.div`
-	margin-bottom : 10px;
-	margin-right : 20px;
-`
 const HotelSelectBox = (props : any) => {
 
 	return (
@@ -23,19 +11,19 @@ const HotelSelectBox = (props : any) => {
 				    <Label htmlFor ="selectCountry">국가</Label>
 					<Select id ="selectCountry" onChange={props.changeCountry}>
 						<option value="">===선택하세요===</option>
-					{cityLists.sort().map((cityList) => (
+					{cityLists.sort().map((city) => (
 						<option
-							key={cityList.country}
-							value={cityList.country}
+							key={city}
+							value={city}
 						>
-							{cityList.country}
+							{city}
 						</option>
 					))}
 					</Select>
                     <Label htmlFor = "selectCity">도시</Label>
 					<Select id ="selectCity" onChange={props.changeCity}>
 						<option value="">===선택하세요===</option>
-					{cityLists.filter((cityList) => (cityList.country === props.country)).map((city) => (
+					{cityCodeLists.filter((cityCodeList) => (cityCodeList.country === props.country)).map((city) => (
 						<option
 							key={city.cityCode}
 							value={city.cityCode}

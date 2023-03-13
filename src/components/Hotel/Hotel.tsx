@@ -1,42 +1,54 @@
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import styled from "styled-components"
-import {selectHotelOptionsType} from "./type"
-import SelectBox from "../../utils/FlightSelectBox"
-import HotelSelectBox from "../../utils/HotelSelectBox"
+import {selectHotelOptionsType, searchHotelOfferOptionType} from "./type"
+import HotelSelectBox from "./HotelSelectBox"
+import HotelList from "./HotelList"
+import HotelOffers from "./HotelOffers"
+import HotelOfferSelectBox from "./HotelOfferSelectBox"
+import { fetchData } from "../../utils/apiCallFunc"
+import { DivFlexRow, DivFlow } from "../../utils/commonStyle"
+import DatePicker from "react-datepicker"
+import { ko } from "date-fns/locale"
+
 const HotelDiv = styled.div`
+    margin-top : 20px;
     display : flex;
     flex-diection : row;
     justify-content : center;
     align-items : center;
 `    
 
-const HotelInfoDiv = styled(HotelDiv)`
+// const HotelInfoDiv = styled(HotelDiv)`
 
-    margin : 0px auto;
-    width : 80%;
-    padding : 15px; 
-    border : 3px #99ccff solid;
-    margin-top : 40px;
-    margin-bottom : 40px;
-    border-radius : 10px;
-`   
+//     margin : 0px auto;
+//     width : 80%;
+//     padding : 15px; 
+//     border : 3px #99ccff solid;
+//     margin-top : 40px;
+//     margin-bottom : 40px;
+//     border-radius : 10px;
+// `   
 
 export default function Hotel(){
     
-
-    const AMADEUS_API_ID = "obCv6RoAxEq0IdbHANdGncCabaugPCwU"
-    const AMADEUS_API_KEY = "DDOBeUcEConOZYQG"
-
-    const[accessToken, setAccessToken] = useState<string|undefined>('')    
-    const[hotelResponseData, setHotelResponseData] = useState<any>([])
+   
+    const[hotelListResponseData, setHotelListResponseData] = useState<any>([])
     const[searchHotelOption, setSearchHotelOption] = useState<selectHotelOptionsType>({
-        country: "", cityCode : "", radius : "", ratings : ""
+        country: '', cityCode : '', radius : '', ratings : ''
     }) 
+  
+    const[searchHotelOfferOption, setSearchHotelOfferOption] = useState<searchHotelOfferOptionType>({
+        hotelId : '', adults : '', checkInDate : null , checkOutDate : null , roomQuantity : ''
+    })
+
+    const[HotelOffersResponseData, setHotelOffersResponseData] = useState<any>([])
 
 
-    const changeCountry = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+    const[selectedHotelIndex, setSelectedHotelIndex] = useState<any>('')
+
+    const changeCountry = (e : React.ChangeEvent<HTMLInputElement>) => {
         setSearchHotelOption(prevState => ({...prevState, country : e.target.value}))
-    },[])
+    }
     const changeCityCode = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
         setSearchHotelOption(prevState => ({...prevState, cityCode : e.target.value}))
     },[])
@@ -50,73 +62,58 @@ export default function Hotel(){
     },[])
 
 
+    const changeHotelId = useCallback((hotelId :string, index : string) => {
+        setSearchHotelOfferOption(prevState =>({...prevState, hotelId : hotelId }))
+        setSelectedHotelIndex(index)
+    },[])
+
+    const changeAdults = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchHotelOption(prevState => ({...prevState, adults : e.target.value}))
+    },[])
+
+    const changeCheckInDate = useCallback((date : Date | null) => {
+        setSearchHotelOption(prevState => ({...prevState, checkedInDate : date}))
+    },[])
+
+    const changeCheckOutDate = useCallback((date : Date | null) => {
+        setSearchHotelOption(prevState => ({...prevState, checkOutDate : date}))
+    },[])
+
+    const changeRoomQuantity = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchHotelOption(prevState => ({...prevState, roomQuantity : e.target.value}))
+    },[])
+
+    console.log(searchHotelOfferOption)
+    console.log(`selectedHotelIndex : ${selectedHotelIndex}`)
+
+const hotelListCallUrl = `https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=PAR&radius=5&radiusUnit=KM&hotelSource=ALL`
+
+const hotelOffersCallUrl = `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=MCLONGHM&adults=1&checkInDate=2023-11-22&roomQuantity=1&paymentPolicy=NONE&bestRateOnly=true`
 
 
-const fetchAuthData = async () : Promise<string|undefined> => {
-        
-    try{
-        const responseAuth = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token",
-        {
-            body: `grant_type=client_credentials&client_id=${AMADEUS_API_ID}&client_secret=${AMADEUS_API_KEY}`,
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            method: "POST"
-        })
-        const responseAuthJson = await responseAuth.json() 
-        console.log(responseAuthJson)
-        return responseAuthJson.access_token
-        
-    }
-    catch(e){
-        console.log(e)
-    }
+const fetchHotelListData = (e : React.FormEvent<HTMLFormElement>) =>{
+
+    fetchData(e, hotelListCallUrl)
+    .then((res)=>{
+        setHotelListResponseData(res.data)
+    })
 }
 
-const fetchData = async (e : React.FormEvent<HTMLFormElement>) => {
-        
-        e.preventDefault();
+console.log(searchHotelOption)
 
-        let token : string | undefined
+const fetchHotelOffersData = (e : React.FormEvent<HTMLFormElement>) =>{
 
-        //state에 저장된 token이 없을 경우 token 정보 가져오는 함수 호출
-
-        if(!accessToken){
-                console.log("acesssToken is not exist")
-                token = await fetchAuthData()
-                console.log(`getToken : ${token}`)
-        }
-        else{
-                token = accessToken;
-        }
-
-        const url = `https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=PAR&radius=5&radiusUnit=KM&hotelSource=ALL`
-        alert(url)
-        console.log(url)
-        fetch(url,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }).then(res =>{
-            if(!res.ok){
-                throw new Error(`${res.status} Error 발생, 페이지 새로 고침 후 다시 시도해 주십시오`)
-            }
-            return res.json()})
-        .then((data)=>{
-            setHotelResponseData(data.data)
-            setAccessToken(token)
-        })
-        .catch((err)=>{
-            alert(err.message)
-            console.log(err)
-            window.location.reload();
-        })
-    }
+    fetchData(e, hotelOffersCallUrl)
+    .then((res)=>{
+        setHotelOffersResponseData(res.data)
+    })
+}
 
     return(
-        <HotelDiv>
-                <form onSubmit={fetchData}>
+        <>
+            <p>STEP 1. 국가와 도시명을 선택하여 호텔 리스트를 검색하세요.</p>
+            <HotelDiv>
+                <form onSubmit={fetchHotelListData}>
                     <div>
                         <HotelSelectBox 
                         changeCountry = {changeCountry} 
@@ -126,7 +123,30 @@ const fetchData = async (e : React.FormEvent<HTMLFormElement>) => {
                         changeRating = {changeRatings}
                         />
                     </div>
+                    <input type = "submit" value="조회"/>
                 </form>
-        </HotelDiv>
+            </HotelDiv>
+            <p>STEP 2. 호텔과 원하는 객실의 조건과 날짜를 선택하세요.</p>
+            <HotelDiv>
+            <form onSubmit={fetchHotelOffersData}>
+            <DivFlexRow>
+            <div>
+            <p>호텔 선택</p>    
+            <HotelList hotelList={hotelListResponseData} setSelectHotel = {(hotelId : string, index : string) => {changeHotelId(hotelId, index)}}/>
+            </div>
+                    <HotelOfferSelectBox 
+                    changeAdults ={changeAdults} 
+                    changeCheckInDate = {changeCheckInDate}
+                    changeCheckOutDate = {changeCheckOutDate}
+                    roomQuantity = {changeRoomQuantity}
+                    selectedCheckInDate = {searchHotelOfferOption.checkInDate}
+                    selectedCheckOutDate = {searchHotelOfferOption.checkOutDate}/>
+            </DivFlexRow>
+                <input type = "submit" value="조회"/>
+            </form>
+        
+         </HotelDiv>
+         <HotelOffers hotelOffers = {HotelOffersResponseData}/>
+        </>
     )
 }
