@@ -5,40 +5,56 @@ export const amadeusAccessTokenConfirm = async () =>{
 
   //sessionstorage에 token이 없을 경우 token 정보 가져오는 함수 호출
 
-  if(!localStorage.getItem("amadeusAccessToken")){
-    const amadeusAccessToken  =  await getAmadeusToken()
-    if(typeof amadeusAccessToken === 'string')
-    localStorage.setItem("amadeusAccessToken", amadeusAccessToken)
-  }
+  if(localStorage.getItem("amadeusAccessToken"))
+  {localStorage.removeItem("amadeusAccessToken")}
+
+
+  const amadeusAccessToken  =  await getAmadeusToken()
+  if(typeof amadeusAccessToken === 'string')
+  localStorage.setItem("amadeusAccessToken", amadeusAccessToken)
+
 
   return localStorage.getItem("amadeusAccessToken")
 
 }
 
 
-export const fetchData = async (e : React.FormEvent<HTMLFormElement>, url : string) => {
-        
-    e.preventDefault();
+class HTTPError extends Error {
+  statusCode;
+  constructor(statusCode: number, message?: string) {
+    super(message)
+    this.name = `HTTPError`
+    this.statusCode = statusCode
+  }
+}
 
-    const token = await amadeusAccessTokenConfirm()
-    const result = await fetch(url,
-    {
-      
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then(res =>{
-        if(!res.ok){
-            throw new Error(`${res.status} Error 발생, 페이지 새로 고침 후 다시 시도해 주십시오`)
+
+export const fetchData = async (e: React.FormEvent<HTMLFormElement>, url : string) => {
+
+  e.preventDefault();
+  const token = await amadeusAccessTokenConfirm()
+
+  try{
+    const response = await fetch(url,{   
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-        return res.json()})
-    .catch((err)=>{
-        alert(err.message)
-        console.log(err)
-        window.location.reload();
-    })
-
-    return result;
+      })
+        if (response.ok) {
+          return await response.json()
+        } else {
+          throw new HTTPError(response.status, response.statusText)
+      }
+    } catch(e){
+        if(e instanceof HTTPError)
+          switch(e.statusCode){
+            case 401:
+              amadeusAccessTokenConfirm();
+              break;
+            default : 
+              console.log(e);
+        }
+  }
 }
 
 

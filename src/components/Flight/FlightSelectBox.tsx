@@ -5,7 +5,7 @@ import { SelectBoxDiv, Label, Select } from "../../utils/commonStyle";
 
 const flightSelectBox = (props : any) => {
 
-	
+
 
 let selectType;
 

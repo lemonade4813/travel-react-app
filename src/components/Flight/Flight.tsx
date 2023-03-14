@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale"
 import styled from "styled-components"
 import { dateToString } from "../../utils/etcFunc"
-import { fetchData } from "../../utils/apiCallFunc"
+import { fetchData} from "../../utils/apiCallFunc"
 
 const FlightDiv = styled.div`
     display : flex;

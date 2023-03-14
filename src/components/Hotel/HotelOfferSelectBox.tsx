@@ -8,8 +8,8 @@ const HotelOfferSelectBox = (props : any) => {
 
     return (
         <DivFlow>
-                    <Label htmlFor = "persons">예약인원</Label>
-					<Select id ="persons">
+                    <Label htmlFor = "adults">예약인원</Label>
+					<Select onClick={props.changeAdults} id ="adults">
                             <option>===선택하세요===</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -47,18 +47,18 @@ const HotelOfferSelectBox = (props : any) => {
                         onChange={(date)=> props.changeCheckOutDate(date)}/>
                     </DivFlexRow>
                     <Label htmlFor = "roomQuantity">예약 객실 수</Label>
-					<Select id ="roomQuantity">
+					<Select onClick={props.changeRoomQuantity} id ="roomQuantity">
                             <option>===선택하세요===</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
-                            <option value="6">1</option>
-                            <option value="7">2</option>
-                            <option value="8">3</option>
-                            <option value="9">4</option>
-                            <option value="10">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                     </Select>
             </DivFlow>
     )
