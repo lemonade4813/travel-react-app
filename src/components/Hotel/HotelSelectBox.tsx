@@ -1,14 +1,21 @@
 import styled from "styled-components";
 import { cityLists, cityCodeLists } from "../../files/CityCodeList";
 
-import { SelectBoxDiv, Label, Select} from "../../utils/commonStyle";
+import { Label, Select, DivFlexColumn, DivFlexRow} from "../../utils/commonStyle";
+
+
+const DivFlexColumnHotelSelectBox = styled(DivFlexColumn)`
+	height : 300px;
+`
+
 
 const HotelSelectBox = (props : any) => {
 
 	return (
 		<>
-			<SelectBoxDiv>
-				    <Label htmlFor ="selectCountry">국가</Label>
+			<DivFlexColumnHotelSelectBox>
+				    <DivFlexRow>
+					<Label htmlFor ="selectCountry">국가</Label>
 					<Select id ="selectCountry" onChange={props.changeCountry}>
 						<option value="">===선택하세요===</option>
 					{cityLists.sort().map((city) => (
@@ -20,6 +27,8 @@ const HotelSelectBox = (props : any) => {
 						</option>
 					))}
 					</Select>
+					</DivFlexRow>
+					<DivFlexRow>
                     <Label htmlFor = "selectCity">도시</Label>
 					<Select id ="selectCity" onChange={props.changeCity}>
 						<option value="">===선택하세요===</option>
@@ -31,7 +40,9 @@ const HotelSelectBox = (props : any) => {
 							{city.city}
 						</option>
 					))}
-					</Select>                
+					</Select>
+					</DivFlexRow>
+					<DivFlexRow>                
                     <Label htmlFor = "selectRating">반경선택(km)</Label>
 					<Select id ="selectRating" onChange={props.changeCity}>
                             <option>===선택하세요===</option>
@@ -46,6 +57,8 @@ const HotelSelectBox = (props : any) => {
                             <option value="9">9</option>
                             <option value="10">10</option>
                     </Select>
+					</DivFlexRow>
+					<DivFlexRow>
                     <Label htmlFor = "selectRating">호텔등급(stars)</Label>
 					<Select id ="selectRating" onChange={props.changeRadius}>
                             <option>===선택하세요===</option>
@@ -54,8 +67,9 @@ const HotelSelectBox = (props : any) => {
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
-                    </Select>          
-			</SelectBoxDiv>
+                    </Select>
+					</DivFlexRow>          
+				</DivFlexColumnHotelSelectBox>
 		</>
 	);
 };

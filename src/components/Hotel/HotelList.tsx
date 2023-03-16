@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import {Table, Thead} from "../../style/tableStyle"
 
-const HotelTable = styled(Table)`
+const HotelListTable = styled(Table)`
 width : 500px;
-height : 300px;
+height : 200px;
 display : block;
 overflow : auto;
 margin-top : 20px;
@@ -11,13 +11,17 @@ margin-top : 20px;
 & > tbody tr:nth-child(2n+1){
     background-color : #f0f0f0;
 }
+
+& > tbody tr {
+    height : 15px;
+}
 `
 
 export const HotelList = ({hotelList, setSelectHotel} : {[key : string] : any}) =>{
 
         return(
             ( 
-            <HotelTable>
+            <HotelListTable>
                 <Thead>
                     <tr>
                         <th>번호</th>
@@ -38,7 +42,7 @@ export const HotelList = ({hotelList, setSelectHotel} : {[key : string] : any}) 
             </tr>
                 ))}    
                 </tbody>
-            </HotelTable>
+            </HotelListTable>
         )
     )
 }

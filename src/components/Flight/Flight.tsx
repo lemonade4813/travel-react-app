@@ -9,25 +9,20 @@ import { ko } from "date-fns/locale"
 import styled from "styled-components"
 import { dateToString } from "../../utils/etcFunc"
 import { fetchData} from "../../utils/apiCallFunc"
+import { DivFlexRow, DivDatePicker, Label } from "../../utils/commonStyle"
 
-const FlightDiv = styled.div`
-    display : flex;
-    flex-diection : row;
-    justify-content : center;
-    align-items : center;
+const DivFlexRowFlight = styled(DivFlexRow)`
+    margin : 20px auto 0px;
+    width : 80%
 `
 
-const FlightInfoDiv = styled(FlightDiv)`
+const FlightInfoDiv = styled(DivFlexRow)`
 
     margin : 0px auto;
-    width : 80%;
-    padding : 15px; 
-    border : 3px #99ccff solid;
-    margin-top : 40px;
-    margin-bottom : 40px;
-    border-radius : 10px;
+    width : 90%
 
 `
+
 
 export default function Flight(){
 
@@ -64,9 +59,7 @@ export default function Flight(){
 
     console.log(searchFlightOption)
 
-
     const flightCallUrl = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${searchFlightOption.departIataCode}&destinationLocationCode=${searchFlightOption.arriveIataCode}&departureDate=${dateToString(searchFlightOption.checkedFlightDate)}&adults=${searchFlightOption.personNumber}&nonStop=false&max=250`
-
 
 
     const fetchFlightResponseData = (e : React.FormEvent<HTMLFormElement>) =>{
@@ -77,7 +70,6 @@ export default function Flight(){
         })
     }
     
-
     console.log(dateToString(searchFlightOption.checkedFlightDate))
 
 
@@ -103,23 +95,25 @@ export default function Flight(){
 
     return(
         <>
-            <FlightDiv>
+            <p>항공권 예약 정보를 선택후 조회하세요.</p>
+            <DivFlexRowFlight>
                 <form onSubmit={fetchFlightResponseData}>
-                    <div>
-                        <p>국가/공항 선택</p>
-                        <FlightSelectBox 
-                        changeCountry = {changeDepartCountry} 
-                        changeIataCode = {changeDepartIataCode} 
-                        country = {searchFlightOption.departCountry}
-                        depart/>
+                <p>국가/공항 선택</p>
+                        <DivFlexRow>
+                            <FlightSelectBox 
+                            changeCountry = {changeDepartCountry} 
+                            changeIataCode = {changeDepartIataCode} 
+                            country = {searchFlightOption.departCountry}
+                            depart/>
 
-                        <FlightSelectBox
-                        changeCountry = {changeArriveCountry}
-                        changeIataCode = {changeArriveIataCode}
-                        country = {searchFlightOption.arriveCountry} 
-                        arrive/>
-                    </div>
-                    <div>
+                            <FlightSelectBox
+                            changeCountry = {changeArriveCountry}
+                            changeIataCode = {changeArriveIataCode}
+                            country = {searchFlightOption.arriveCountry} 
+                            arrive/>
+                    </DivFlexRow>
+                    <DivFlexRow>
+                    <DivDatePicker>
                         <p>예약 날짜 선택</p>
                         <DatePicker
                         locale={ko} 
@@ -130,17 +124,26 @@ export default function Flight(){
                         placeholderText="예약 날짜 선택"
                         selected={searchFlightOption.checkedFlightDate}
                         onChange={(date)=> changeFlightDate(date)}/>
-                    </div>
-                    <label>탑승 인원</label>
+                    </DivDatePicker>
+                    <DivFlexRow>
+                    <Label>탑승 인원(명)</Label>
                     <select onChange={changePersonNumber}>
                             <option>===선택하세요===</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
                     </select>
+                    </DivFlexRow>
+                    </DivFlexRow>
                     <input type = "submit" value="조회"/>
                 </form>
-            </FlightDiv>
+            </DivFlexRowFlight>
             {flightInfo}
         </>
     )

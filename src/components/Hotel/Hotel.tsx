@@ -1,33 +1,18 @@
 import { useCallback, useMemo, useState } from "react"
 import styled from "styled-components"
-import {selectHotelOptionsType, searchHotelOfferOptionType} from "./type"
 import HotelSelectBox from "./HotelSelectBox"
+import {selectHotelOptionsType, searchHotelOfferOptionType} from "./type"
 import HotelList from "./HotelList"
 import HotelOffers from "./HotelOffers"
 import HotelOfferSelectBox from "./HotelOfferSelectBox"
 import { fetchData } from "../../utils/apiCallFunc"
-import { DivFlexRow, DivFlow } from "../../utils/commonStyle"
-import DatePicker from "react-datepicker"
-import { ko } from "date-fns/locale"
+import { DivFlexRow } from "../../utils/commonStyle"
+import { HotelOffersResponseDataSample } from "../../files/HotelOffersResponseDataSample"
 
-const HotelDiv = styled.div`
-    margin-top : 20px;
-    display : flex;
-    flex-diection : row;
-    justify-content : center;
-    align-items : center;
-`    
-
-// const HotelInfoDiv = styled(HotelDiv)`
-
-//     margin : 0px auto;
-//     width : 80%;
-//     padding : 15px; 
-//     border : 3px #99ccff solid;
-//     margin-top : 40px;
-//     margin-bottom : 40px;
-//     border-radius : 10px;
-// `   
+const DivHotelSelectBox = styled(DivFlexRow)`
+    width : 70%;
+    margin: 30px auto 30px;
+`
 
 export default function Hotel(){
     
@@ -94,18 +79,20 @@ const fetchHotelListData = (e : React.FormEvent<HTMLFormElement>) =>{
     
     fetchData(e, hotelListCallUrl)
     .then((res)=>{
-        setHotelListResponseData(res.data)
-    })
-}
 
+        setHotelListResponseData(res.data)
+})
+}
 const fetchHotelOffersData = (e : React.FormEvent<HTMLFormElement>) =>{
 
     fetchData(e, hotelOffersCallUrl)
     .then((res)=>{
-        setHotelOffersResponseData(res.data)
+        
+        res.length > 0 ? setHotelOffersResponseData(res.data) : setHotelOffersResponseData(HotelOffersResponseDataSample.data[0])
     })
-}
 
+}
+console.log(hotelOffersResponseData)
 
 const selectHotelExample = () =>{
     setSearchHotelOption({country : '프랑스', cityCode : 'PAR', radius : '5', ratings : '1'})
@@ -115,12 +102,13 @@ const selecthotelOfferExample = () => {
     setSearchHotelOfferOption({hotelId : 'MCLONGHM', adults : '1', checkInDate : new Date('2023-11-23') , checkOutDate : new Date('2023-11-24') , roomQuantity : '1' })
 
 }
-console.log(searchHotelOfferOption)
-console.log(`hotelOffersResponseData : ${JSON.stringify(hotelOffersResponseData)}`)
+
     return(
         <>
+    <DivHotelSelectBox>
+            <div>
             <p>STEP 1. 국가와 도시명을 선택하여 호텔 리스트를 검색하세요.</p>
-            <HotelDiv>
+            <button onClick={selectHotelExample}>Example</button>
                 <form onSubmit={fetchHotelListData}>
                     <div>
                         <HotelSelectBox 
@@ -133,19 +121,18 @@ console.log(`hotelOffersResponseData : ${JSON.stringify(hotelOffersResponseData)
                     </div>
                     <input type = "submit" value="조회"/>
                 </form>
-                <button onClick={selectHotelExample}>Example</button>
-            </HotelDiv>
-            {hotelListResponseData.length > 0 ? (<div>
-            <>
-            <p>STEP 2. 호텔과 원하는 객실의 조건과 날짜를 선택하세요.</p>
-            <HotelDiv>
-            <form onSubmit={fetchHotelOffersData}>
-            <DivFlexRow>
-            <div>
-            <p>호텔 선택</p>
-            {searchHotelOfferOption.hotelId ? <p>호텔이 선택되었습니다.</p> : <p></p>}    
-            <HotelList hotelList={hotelListResponseData} setSelectHotel = {(hotelId : string, index : string) => {changeHotelId(hotelId, index)}}/>
             </div>
+            <div>
+                <p>STEP 2. 호텔과 원하는 객실의 조건과 날짜를 선택하세요.</p>
+                    {hotelListResponseData.length > 0 ? (<div>
+                <div>
+                <button onClick = {selecthotelOfferExample}>Example</button>
+                <form onSubmit={fetchHotelOffersData}>
+                    <div>
+                        <p>호텔 선택</p>
+                        {searchHotelOfferOption.hotelId ? <p>선택된 호텔 ID : {searchHotelOfferOption.hotelId}</p> : <p></p>}    
+                        <HotelList hotelList={hotelListResponseData} setSelectHotel = {(hotelId : string, index : string) => {changeHotelId(hotelId, index)}}/>
+                    </div>
                     <HotelOfferSelectBox 
                     changeAdults ={changeAdults} 
                     changeCheckInDate = {changeCheckInDate}
@@ -153,13 +140,12 @@ console.log(`hotelOffersResponseData : ${JSON.stringify(hotelOffersResponseData)
                     changeRoomQuantity = {changeRoomQuantity}
                     selectedCheckInDate = {searchHotelOfferOption.checkInDate}
                     selectedCheckOutDate = {searchHotelOfferOption.checkOutDate}/>
-            </DivFlexRow>
                 <input type = "submit" value="조회"/>
-            </form>
-            <button onClick = {selecthotelOfferExample}>Example</button>
-         </HotelDiv>
-         </>
-         </div>): <p></p>}
+                </form>
+                </div>
+            </div>): <p></p>}
+            </div>
+            </DivHotelSelectBox>
          <HotelOffers hotelOffers = {hotelOffersResponseData}/>
         </>
     )

@@ -1,10 +1,14 @@
 import styled from "styled-components";
 import { airportLists, countryLists } from "../../files/AirportList";
-import { SelectBoxDiv, Label, Select } from "../../utils/commonStyle";
+import { DivFlexRow, Label, Select } from "../../utils/commonStyle";
 
+const DivSelectBox = styled(DivFlexRow)`
+    border : none;
+    align-items : center;
+	margin : 0;
+`
 
 const flightSelectBox = (props : any) => {
-
 
 
 let selectType;
@@ -15,7 +19,7 @@ let selectType;
 console.log(countryLists)
 	return (
 		<>
-			<SelectBoxDiv>
+			<DivSelectBox>
 				<Label htmlFor ="selectCountry">{selectType}국가</Label>
 					<Select id ="selectCountry" onChange={props.changeCountry} disabled={props.selectCountry}>
 						<option value="">===선택하세요===</option>
@@ -28,6 +32,8 @@ console.log(countryLists)
 						</option>
 					))}
 					</Select>
+			</DivSelectBox>	
+			<DivSelectBox>	
 				<Label htmlFor = "selectAirport">{selectType}공항</Label>
 					<Select id ="selectCountry" onChange={props.changeIataCode}>
 						<option value="">===선택하세요===</option>
@@ -40,7 +46,7 @@ console.log(countryLists)
 						</option>
 					))}
 					</Select>
-			</SelectBoxDiv>
+			</DivSelectBox>
 		</>
 	);
 };

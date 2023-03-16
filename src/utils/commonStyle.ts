@@ -1,40 +1,50 @@
 import styled from "styled-components"
 
 export const Label = styled.label`
-	margin : 15px;
+	width : 100px;
 `
 
+
 export const Select = styled.select`
-	width : 250px;
+	width : 50%;
 	height : 30px;
 `
 
-export const SelectBoxDiv = styled.div`
+export const DivFlexColumn = styled.div`
 	margin-bottom : 10px;
 	margin-right : 20px;
     padding : 10px;
     display : flex;
-    flex-direction : row;
-    justify-content : center;
+    flex-direction : column;
+    justify-content : space-around;
     align-items : center;
     border : 1px solid rgba(137, 119, 173, 0.3);
-    border-radius : 10px
+    border-radius : 10px;
     
 `
 export const DivFlexRow = styled.div`
     border : 1px solid rgba(137, 119, 173, 0.3);
     border-radius : 10px;
-    padding : 30px;
+    padding : 10px;
+    display : flex;
+    flex-direction : row;
+    justify-content : space-around;
+`
+
+export const DivDatePicker = styled.div`
+
+    border : 1px solid rgba(137, 119, 173, 0.3);
+    border-radius : 10px;
+    align-items : center;
     display : flex;
     flex-direction : row;
     justify-content : center;
-    align-items : center;
-
-    & > p {
-        width : 150px;
-    }
 `
 
-export const DivFlow = styled.div`
-    float : left;
+
+export const Span = styled.span`
+    margin-left : 30px;
+    width : 40%;
+    height : 40px;
 `
+
