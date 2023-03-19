@@ -8,7 +8,6 @@ const DivFlexColumnHotelSelectBox = styled(DivFlexColumn)`
 	height : 300px;
 `
 
-
 const HotelSelectBox = (props : any) => {
 
 	return (
@@ -44,7 +43,7 @@ const HotelSelectBox = (props : any) => {
 					</DivFlexRow>
 					<DivFlexRow>                
                     <Label htmlFor = "selectRating">반경선택(km)</Label>
-					<Select id ="selectRating" onChange={props.changeCity}>
+					<Select id ="selectRating" onChange={props.radius}>
                             <option>===선택하세요===</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -60,7 +59,7 @@ const HotelSelectBox = (props : any) => {
 					</DivFlexRow>
 					<DivFlexRow>
                     <Label htmlFor = "selectRating">호텔등급(stars)</Label>
-					<Select id ="selectRating" onChange={props.changeRadius}>
+					<Select id ="selectRating" onChange={props.ratings}>
                             <option>===선택하세요===</option>
                             <option value="1">1</option>
                             <option value="2">2</option>

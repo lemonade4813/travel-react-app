@@ -31,43 +31,25 @@ export default function Hotel(){
 
     const[selectedHotelIndex, setSelectedHotelIndex] = useState<any>('')
 
-    const changeCountry = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchHotelOption(prevState => ({...prevState, country : e.target.value}))
-    }
-    const changeCityCode = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchHotelOption(prevState => ({...prevState, cityCode : e.target.value}))
+    const changeHotelOption = useCallback((key : string) => (e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchHotelOption(prevState => ({...prevState, [key] : e.target.value}))
     },[])
-
-    const changeRadius  = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchHotelOption(prevState => ({...prevState, radius: e.target.value}))
-	},[])
-
-    const changeRatings = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchHotelOption(prevState => ({...prevState, ratings : e.target.value}))
-    },[])
-
 
     const changeHotelId = useCallback((hotelId :string, index : string) => {
         setSearchHotelOfferOption(prevState =>({...prevState, hotelId : hotelId }))
         setSelectedHotelIndex(index)
     },[])
 
-    const changeAdults = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchHotelOfferOption(prevState => ({...prevState, adults : e.target.value}))
+    const changeHotelOfferOption = useCallback((key : string) => (e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchHotelOfferOption(prevState => ({...prevState, [key] : e.target.value}))
     },[])
 
-    const changeCheckInDate = useCallback((date : Date | null) => {
-        setSearchHotelOfferOption(prevState => ({...prevState, checkInDate : date}))
+
+    const changeCheckInOutDate = useCallback((key : string) => (date : Date | null) => {
+        setSearchHotelOfferOption(prevState => ({...prevState, [key] : date}))
     },[])
 
-    const changeCheckOutDate = useCallback((date : Date | null) => {
-        setSearchHotelOfferOption(prevState => ({...prevState, checkOutDate : date}))
-    },[])
-
-    const changeRoomQuantity = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchHotelOfferOption(prevState => ({...prevState, roomQuantity : e.target.value}))
-    },[])
-
+console.log(searchHotelOfferOption)    
 
 const hotelListCallUrl = `https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=${searchHotelOption.cityCode}&radius=${searchHotelOption.radius}&radiusUnit=KM&hotelSource=ALL&ratings=${searchHotelOption.ratings}`
 
@@ -92,7 +74,7 @@ const fetchHotelOffersData = (e : React.FormEvent<HTMLFormElement>) =>{
     })
 
 }
-console.log(hotelOffersResponseData)
+
 
 const selectHotelExample = () =>{
     setSearchHotelOption({country : '프랑스', cityCode : 'PAR', radius : '5', ratings : '1'})
@@ -103,6 +85,7 @@ const selecthotelOfferExample = () => {
 
 }
 
+console.log(`searchHotelOfferOption : ${searchHotelOfferOption}`)    
     return(
         <>
     <DivHotelSelectBox>
@@ -112,11 +95,11 @@ const selecthotelOfferExample = () => {
                 <form onSubmit={fetchHotelListData}>
                     <div>
                         <HotelSelectBox 
-                        changeCountry = {changeCountry} 
+                        changeCountry = {changeHotelOption('country')} 
                         country = {searchHotelOption.country}
-                        changeCity = {changeCityCode} 
-                        changeRadius = {changeRadius}
-                        changeRating = {changeRatings}
+                        changeCity = {changeHotelOption('cityCode')} 
+                        changeRadius = {changeHotelOption('radius')}
+                        changeRatings = {changeHotelOption('ratings')}
                         />
                     </div>
                     <input type = "submit" value="조회"/>
@@ -134,10 +117,10 @@ const selecthotelOfferExample = () => {
                         <HotelList hotelList={hotelListResponseData} setSelectHotel = {(hotelId : string, index : string) => {changeHotelId(hotelId, index)}}/>
                     </div>
                     <HotelOfferSelectBox 
-                    changeAdults ={changeAdults} 
-                    changeCheckInDate = {changeCheckInDate}
-                    changeCheckOutDate = {changeCheckOutDate}
-                    changeRoomQuantity = {changeRoomQuantity}
+                    changeAdults ={changeHotelOfferOption('adults')} 
+                    changeCheckInDate = {changeCheckInOutDate('checkIndate')}
+                    changeCheckOutDate = {changeCheckInOutDate('checkOutDate')}
+                    changeRoomQuantity = {changeHotelOfferOption('roomQuantity')}
                     selectedCheckInDate = {searchHotelOfferOption.checkInDate}
                     selectedCheckOutDate = {searchHotelOfferOption.checkOutDate}/>
                 <input type = "submit" value="조회"/>

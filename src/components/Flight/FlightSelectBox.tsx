@@ -15,8 +15,6 @@ let selectType;
 
 	props.depart ? selectType = '출발' : selectType = '도착'
 
-
-console.log(countryLists)
 	return (
 		<>
 			<DivSelectBox>

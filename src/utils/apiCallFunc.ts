@@ -1,15 +1,15 @@
 import { AMADEUS_API_ID, AMADEUS_API_KEY } from "./apiKey"
 
-export const amadeusAccessTokenConfirm = async () =>{
+export const setAmadeusAccessToken = async () =>{
 
 
   //sessionstorage에 token이 없을 경우 token 정보 가져오는 함수 호출
 
   if(localStorage.getItem("amadeusAccessToken"))
-  {localStorage.removeItem("amadeusAccessToken")}
+  removeAmadeusAccessToken(); 
 
 
-  const amadeusAccessToken  =  await getAmadeusToken()
+  const amadeusAccessToken  =  await getAmadeusAccessToken()
   if(typeof amadeusAccessToken === 'string')
   localStorage.setItem("amadeusAccessToken", amadeusAccessToken)
 
@@ -17,6 +17,12 @@ export const amadeusAccessTokenConfirm = async () =>{
   return localStorage.getItem("amadeusAccessToken")
 
 }
+
+
+export const removeAmadeusAccessToken = () => {
+  localStorage.removeItem("amadeusAccessToken")
+}
+
 
 
 class HTTPError extends Error {
@@ -32,7 +38,8 @@ class HTTPError extends Error {
 export const fetchData = async (e: React.FormEvent<HTMLFormElement>, url : string) => {
 
   e.preventDefault();
-  const token = await amadeusAccessTokenConfirm()
+
+  const token = localStorage.getItem("amadeusAccessToken")
 
   try{
     const response = await fetch(url,{   
@@ -49,7 +56,7 @@ export const fetchData = async (e: React.FormEvent<HTMLFormElement>, url : strin
         if(e instanceof HTTPError)
           switch(e.statusCode){
             case 401:
-              amadeusAccessTokenConfirm();
+              setAmadeusAccessToken();
               break;
             default : 
               console.log(e);
@@ -58,7 +65,7 @@ export const fetchData = async (e: React.FormEvent<HTMLFormElement>, url : strin
 }
 
 
-export const getAmadeusToken = async () : Promise<string | undefined> => {
+export const getAmadeusAccessToken = async () : Promise<string | undefined> => {
         
   try{
       const responseAuth = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token",

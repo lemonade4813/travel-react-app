@@ -20,9 +20,7 @@ const FlightInfoDiv = styled(DivFlexRow)`
 
     margin : 0px auto;
     width : 90%
-
 `
-
 
 export default function Flight(){
 
@@ -33,29 +31,15 @@ export default function Flight(){
         , personNumber : ""
     }) 
 
-    const changeDepartCountry = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption(prevState => ({...prevState, departCountry : e.target.value}))
+    const changeFlightOption = useCallback((key : string) => (e : React.ChangeEvent<HTMLInputElement>) => {
+        setSearchFlightOption(prevState => ({...prevState, [key] : e.target.value}))
     },[])
 
-    const changeDepartIataCode  = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption(prevState => ({...prevState, departIataCode: e.target.value}))
-	},[])
-
-    const changeArriveCountry = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption(prevState => ({...prevState, arriveCountry : e.target.value}))
-    },[])
-
-    const changeArriveIataCode  = useCallback((e : React.ChangeEvent<HTMLInputElement>) => {
-        setSearchFlightOption(prevState => ({...prevState, arriveIataCode: e.target.value}))
-	},[])
-
+   
     const changeFlightDate = useCallback((date : Date | null) => {
         setSearchFlightOption(prevState => ({...prevState, checkedFlightDate : date}))
     },[])
 
-    const changePersonNumber = useCallback((e : React.ChangeEvent<HTMLSelectElement>) =>{
-        setSearchFlightOption(prevState => ({...prevState, personNumber : e.target.value}))
-    },[])
 
     console.log(searchFlightOption)
 
@@ -70,8 +54,6 @@ export default function Flight(){
         })
     }
     
-    console.log(dateToString(searchFlightOption.checkedFlightDate))
-
 
     const flightInfo = useMemo(
         ()=>
@@ -101,14 +83,14 @@ export default function Flight(){
                 <p>국가/공항 선택</p>
                         <DivFlexRow>
                             <FlightSelectBox 
-                            changeCountry = {changeDepartCountry} 
-                            changeIataCode = {changeDepartIataCode} 
+                            changeCountry = {changeFlightOption('departCountry')} 
+                            changeIataCode = {changeFlightOption('departIataCode')} 
                             country = {searchFlightOption.departCountry}
                             depart/>
 
                             <FlightSelectBox
-                            changeCountry = {changeArriveCountry}
-                            changeIataCode = {changeArriveIataCode}
+                            changeCountry = {changeFlightOption('country')}
+                            changeIataCode = {changeFlightOption('iataCode')}
                             country = {searchFlightOption.arriveCountry} 
                             arrive/>
                     </DivFlexRow>
@@ -127,7 +109,7 @@ export default function Flight(){
                     </DivDatePicker>
                     <DivFlexRow>
                     <Label>탑승 인원(명)</Label>
-                    <select onChange={changePersonNumber}>
+                    <select onChange={()=>{changeFlightOption('personNumber')}}>
                             <option>===선택하세요===</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
