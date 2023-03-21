@@ -4,7 +4,7 @@ import Flight from './components/Flight/Flight';
 import Hotel from './components/Hotel/Hotel';
 import Restaurant from './components/Restaurant';
 const AppDiv= styled.div`
-  font-family: var(--font-notoSansKRLight);
+  font-family: var(--font-SCoreDream3Light);
   text-align : center;
 `
 const MainNav = styled.div`
@@ -32,7 +32,7 @@ const NavStyle = styled(NavLink)`
   padding: 20px;
   font-size: 20px;
   font-weight: 400;
-  font-family: var(--font-notoSansKRLight);
+  font-family : var(--font-ygJalnan);
   border-right : 1px solid white;
 
   margin: 5px;

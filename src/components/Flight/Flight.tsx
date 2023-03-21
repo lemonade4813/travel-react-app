@@ -9,7 +9,7 @@ import { ko } from "date-fns/locale"
 import styled from "styled-components"
 import { dateToString } from "../../utils/etcFunc"
 import { fetchData} from "../../utils/apiCallFunc"
-import { DivFlexRow, DivDatePicker, Label } from "../../utils/commonStyle"
+import { DivFlexRow, DivDatePicker, Label, SubmitButton, Select } from "../../utils/commonStyle"
 
 const DivFlexRowFlight = styled(DivFlexRow)`
     margin : 20px auto 0px;
@@ -27,6 +27,7 @@ export default function Flight(){
     const[flightResponseData, setFlightResponseData] = useState<any>([])
 
     const[searchFlightOption, setSearchFlightOption] = useState<selectFlightOptionsType>({
+        
         departCountry : "", departIataCode : "", arriveCountry : "", arriveIataCode : "", checkedFlightDate: null
         , personNumber : ""
     }) 
@@ -77,7 +78,7 @@ export default function Flight(){
 
     return(
         <>
-            <p>항공권 예약 정보를 선택후 조회하세요.</p>
+            <p>항공권 예약 정보를 선택후 검색하세요.</p>
             <DivFlexRowFlight>
                 <form onSubmit={fetchFlightResponseData}>
                 <p>국가/공항 선택</p>
@@ -109,7 +110,7 @@ export default function Flight(){
                     </DivDatePicker>
                     <DivFlexRow>
                     <Label>탑승 인원(명)</Label>
-                    <select onChange={()=>{changeFlightOption('personNumber')}}>
+                    <Select onChange={() => {changeFlightOption('personNumber')}}>
                             <option>===선택하세요===</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -120,10 +121,10 @@ export default function Flight(){
                             <option value="7">7</option>
                             <option value="8">8</option>
                             <option value="9">9</option>
-                    </select>
+                    </Select>
                     </DivFlexRow>
                     </DivFlexRow>
-                    <input type = "submit" value="조회"/>
+                    <SubmitButton type = "submit" value="검색"/>
                 </form>
             </DivFlexRowFlight>
             {flightInfo}

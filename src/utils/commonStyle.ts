@@ -4,7 +4,6 @@ export const Label = styled.label`
 	width : 100px;
 `
 
-
 export const Select = styled.select`
 	width : 50%;
 	height : 30px;
@@ -48,3 +47,22 @@ export const Span = styled.span`
     height : 40px;
 `
 
+export const SubmitButton = styled.input`
+    font-family: var(--font-notoSansKRLight);
+    width : 60px;
+    height : 30px;
+    background-color : #4527a0;
+    border-style : none;
+    color : #fff;
+    margin-top : 10px;
+`
+
+export const ExampleButton = styled.button`
+    font-family : var(--Dovemayo_gothic);
+    width : 140px;
+    height : 30px;
+    background-color : #ffa500;
+    color : #fff;
+    margin-bottom : 10px;
+    border-style : none;
+`

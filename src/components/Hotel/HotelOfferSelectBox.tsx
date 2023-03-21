@@ -1,7 +1,7 @@
 import DatePicker from "react-datepicker"
 import styled from "styled-components"
 import { ko } from "date-fns/locale"
-import { Label, Select, DivDatePicker, DivFlexColumn, DivFlexRow, Span } from "../../utils/commonStyle";
+import { Label, Select, DivDatePicker, DivFlexRow, Span } from "../../utils/commonStyle";
 
 
 const HotelOfferSelectBox = (props : any) => {

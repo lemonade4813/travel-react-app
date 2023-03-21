@@ -29,6 +29,13 @@ code {
 
 
 @font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "geminiMoon";
   src: url(../src/fonts/Gemini\ Moon.otf);
 }
@@ -40,7 +47,10 @@ code {
 
 :root{
     --font-geminiMoon: "geminiMoon";
-    --font-notoSansKRLight: "notoSansKRLight"
+    --font-notoSansKRLight: "notoSansKRLight";
+    --font-ygJalnan : "yg-jalnan";
+    --font-SCoreDream3Light : "S-CoreDream-3Light";
+    --font-DovemayoGothic : "Dovemayo_gothic";
   }
 
   

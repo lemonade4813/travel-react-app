@@ -6,8 +6,10 @@ import HotelList from "./HotelList"
 import HotelOffers from "./HotelOffers"
 import HotelOfferSelectBox from "./HotelOfferSelectBox"
 import { fetchData } from "../../utils/apiCallFunc"
-import { DivFlexRow } from "../../utils/commonStyle"
+import { DivFlexRow, ExampleButton, SubmitButton } from "../../utils/commonStyle"
 import { HotelOffersResponseDataSample } from "../../files/HotelOffersResponseDataSample"
+import { dateToString } from "../../utils/etcFunc"
+
 
 const DivHotelSelectBox = styled(DivFlexRow)`
     width : 70%;
@@ -29,15 +31,8 @@ export default function Hotel(){
     const[hotelOffersResponseData, setHotelOffersResponseData] = useState<any>([])
 
 
-    const[selectedHotelIndex, setSelectedHotelIndex] = useState<any>('')
-
     const changeHotelOption = useCallback((key : string) => (e : React.ChangeEvent<HTMLInputElement>) => {
         setSearchHotelOption(prevState => ({...prevState, [key] : e.target.value}))
-    },[])
-
-    const changeHotelId = useCallback((hotelId :string, index : string) => {
-        setSearchHotelOfferOption(prevState =>({...prevState, hotelId : hotelId }))
-        setSelectedHotelIndex(index)
     },[])
 
     const changeHotelOfferOption = useCallback((key : string) => (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +48,7 @@ console.log(searchHotelOfferOption)
 
 const hotelListCallUrl = `https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=${searchHotelOption.cityCode}&radius=${searchHotelOption.radius}&radiusUnit=KM&hotelSource=ALL&ratings=${searchHotelOption.ratings}`
 
-const hotelOffersCallUrl = `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=MCLONGHM&adults=1&checkInDate=2023-11-22&roomQuantity=1&paymentPolicy=NONE&bestRateOnly=true`
+const hotelOffersCallUrl = `https://test.api.amadeus.com/v3/shopping/hotel-offers?hotelIds=${searchHotelOfferOption.hotelId}&adults=${searchHotelOfferOption.adults}&checkInDate=${dateToString(searchHotelOfferOption.checkInDate)}&roomQuantity=${searchHotelOfferOption.roomQuantity}&paymentPolicy=NONE&bestRateOnly=true`
 
 
 const fetchHotelListData = (e : React.FormEvent<HTMLFormElement>) =>{
@@ -69,10 +64,8 @@ const fetchHotelOffersData = (e : React.FormEvent<HTMLFormElement>) =>{
 
     fetchData(e, hotelOffersCallUrl)
     .then((res)=>{
-        
         res.length > 0 ? setHotelOffersResponseData(res.data) : setHotelOffersResponseData(HotelOffersResponseDataSample.data[0])
     })
-
 }
 
 
@@ -91,7 +84,7 @@ console.log(`searchHotelOfferOption : ${searchHotelOfferOption}`)
     <DivHotelSelectBox>
             <div>
             <p>STEP 1. 국가와 도시명을 선택하여 호텔 리스트를 검색하세요.</p>
-            <button onClick={selectHotelExample}>Example</button>
+            <ExampleButton onClick={selectHotelExample}>검색 조건 자동 선택</ExampleButton>
                 <form onSubmit={fetchHotelListData}>
                     <div>
                         <HotelSelectBox 
@@ -102,19 +95,19 @@ console.log(`searchHotelOfferOption : ${searchHotelOfferOption}`)
                         changeRatings = {changeHotelOption('ratings')}
                         />
                     </div>
-                    <input type = "submit" value="조회"/>
+                    <SubmitButton type = "submit" value="검색"/>
                 </form>
             </div>
             <div>
                 <p>STEP 2. 호텔과 원하는 객실의 조건과 날짜를 선택하세요.</p>
                     {hotelListResponseData.length > 0 ? (<div>
                 <div>
-                <button onClick = {selecthotelOfferExample}>Example</button>
+                <ExampleButton onClick = {selecthotelOfferExample}>자동 설정</ExampleButton>
                 <form onSubmit={fetchHotelOffersData}>
                     <div>
                         <p>호텔 선택</p>
                         {searchHotelOfferOption.hotelId ? <p>선택된 호텔 ID : {searchHotelOfferOption.hotelId}</p> : <p></p>}    
-                        <HotelList hotelList={hotelListResponseData} setSelectHotel = {(hotelId : string, index : string) => {changeHotelId(hotelId, index)}}/>
+                        <HotelList hotelList={hotelListResponseData} setSelectHotel = {changeHotelOfferOption('hotelId')}/>
                     </div>
                     <HotelOfferSelectBox 
                     changeAdults ={changeHotelOfferOption('adults')} 
@@ -123,7 +116,7 @@ console.log(`searchHotelOfferOption : ${searchHotelOfferOption}`)
                     changeRoomQuantity = {changeHotelOfferOption('roomQuantity')}
                     selectedCheckInDate = {searchHotelOfferOption.checkInDate}
                     selectedCheckOutDate = {searchHotelOfferOption.checkOutDate}/>
-                <input type = "submit" value="조회"/>
+                <SubmitButton type = "submit" value="검색"/>
                 </form>
                 </div>
             </div>): <p></p>}
