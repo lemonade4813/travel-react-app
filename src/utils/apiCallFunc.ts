@@ -1,3 +1,4 @@
+import { errorMonitor } from "events";
 import { AMADEUS_API_ID, AMADEUS_API_KEY } from "./apiKey"
 
 export const setAmadeusAccessToken = async () =>{
@@ -17,7 +18,6 @@ export const setAmadeusAccessToken = async () =>{
   return localStorage.getItem("amadeusAccessToken")
 
 }
-
 
 export const removeAmadeusAccessToken = () => {
   localStorage.removeItem("amadeusAccessToken")
@@ -52,14 +52,15 @@ export const fetchData = async (e: React.FormEvent<HTMLFormElement>, url : strin
         } else {
           throw new HTTPError(response.status, response.statusText)
       }
-    } catch(e){
-        if(e instanceof HTTPError)
-          switch(e.statusCode){
+    } catch(err){
+        if(err instanceof HTTPError)
+          switch(err.statusCode){
             case 401:
-              setAmadeusAccessToken();
+              await setAmadeusAccessToken();
+              fetchData(e, url);
               break;
             default : 
-              console.log(e);
+              console.log(err);
         }
   }
 }

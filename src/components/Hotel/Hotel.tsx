@@ -39,12 +39,14 @@ export default function Hotel(){
         setSearchHotelOfferOption(prevState => ({...prevState, [key] : e.target.value}))
     },[])
 
+    const changeHotelId = useCallback((hotelId :string, index : string) => {
+        setSearchHotelOfferOption(prevState =>({...prevState, hotelId : hotelId }))
+    },[])
 
     const changeCheckInOutDate = useCallback((key : string) => (date : Date | null) => {
         setSearchHotelOfferOption(prevState => ({...prevState, [key] : date}))
     },[])
 
-console.log(searchHotelOfferOption)    
 
 const hotelListCallUrl = `https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=${searchHotelOption.cityCode}&radius=${searchHotelOption.radius}&radiusUnit=KM&hotelSource=ALL&ratings=${searchHotelOption.ratings}`
 
@@ -56,9 +58,8 @@ const fetchHotelListData = (e : React.FormEvent<HTMLFormElement>) =>{
     
     fetchData(e, hotelListCallUrl)
     .then((res)=>{
-
         setHotelListResponseData(res.data)
-})
+    })
 }
 const fetchHotelOffersData = (e : React.FormEvent<HTMLFormElement>) =>{
 
@@ -78,7 +79,7 @@ const selecthotelOfferExample = () => {
 
 }
 
-console.log(`searchHotelOfferOption : ${searchHotelOfferOption}`)    
+console.log(searchHotelOfferOption)    
     return(
         <>
     <DivHotelSelectBox>
@@ -102,16 +103,16 @@ console.log(`searchHotelOfferOption : ${searchHotelOfferOption}`)
                 <p>STEP 2. 호텔과 원하는 객실의 조건과 날짜를 선택하세요.</p>
                     {hotelListResponseData.length > 0 ? (<div>
                 <div>
-                <ExampleButton onClick = {selecthotelOfferExample}>자동 설정</ExampleButton>
+                <ExampleButton onClick = {selecthotelOfferExample}>검색 조건 자동 선택</ExampleButton>
                 <form onSubmit={fetchHotelOffersData}>
                     <div>
                         <p>호텔 선택</p>
                         {searchHotelOfferOption.hotelId ? <p>선택된 호텔 ID : {searchHotelOfferOption.hotelId}</p> : <p></p>}    
-                        <HotelList hotelList={hotelListResponseData} setSelectHotel = {changeHotelOfferOption('hotelId')}/>
+                        <HotelList hotelList={hotelListResponseData} setSelectHotel = {changeHotelId}/>
                     </div>
                     <HotelOfferSelectBox 
                     changeAdults ={changeHotelOfferOption('adults')} 
-                    changeCheckInDate = {changeCheckInOutDate('checkIndate')}
+                    changeCheckInDate = {changeCheckInOutDate('checkInDate')}
                     changeCheckOutDate = {changeCheckInOutDate('checkOutDate')}
                     changeRoomQuantity = {changeHotelOfferOption('roomQuantity')}
                     selectedCheckInDate = {searchHotelOfferOption.checkInDate}

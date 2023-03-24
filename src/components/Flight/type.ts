@@ -3,6 +3,6 @@ export type selectFlightOptionsType= {
     departIataCode : string,
     arriveCountry : string,
     arriveIataCode :string
-    checkedFlightDate : Date | null
+    selectedFlightDate : Date | null
     personNumber : string
 }

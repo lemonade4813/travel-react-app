@@ -19,7 +19,7 @@ let selectType;
 		<>
 			<DivSelectBox>
 				<Label htmlFor ="selectCountry">{selectType}국가</Label>
-					<Select id ="selectCountry" onChange={props.changeCountry} disabled={props.selectCountry}>
+					<Select id ="selectCountry" onChange={props.changeCountry}>
 						<option value="">===선택하세요===</option>
 					{countryLists.sort().map((country) => (
 						<option
@@ -33,7 +33,7 @@ let selectType;
 			</DivSelectBox>	
 			<DivSelectBox>	
 				<Label htmlFor = "selectAirport">{selectType}공항</Label>
-					<Select id ="selectCountry" onChange={props.changeIataCode}>
+					<Select id ="selectCountry" onChange={props.changeIataCode} disabled={props.selectCountry}>
 						<option value="">===선택하세요===</option>
 					{airportLists.filter((airport) => (airport.country === props.country)).map((airport) => (
 						<option

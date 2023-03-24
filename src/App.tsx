@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {BrowserRouter, Routes, Route, NavLink} from 'react-router-dom'
 import Flight from './components/Flight/Flight';
 import Hotel from './components/Hotel/Hotel';
-import Restaurant from './components/Restaurant';
+import Restaurant from './components/Restaurant/Restaurant';
 const AppDiv= styled.div`
   font-family: var(--font-SCoreDream3Light);
   text-align : center;

@@ -33,7 +33,7 @@ export const HotelList = ({hotelList, setSelectHotel} : {[key : string] : any}) 
                 </Thead>
                 <tbody>
         {hotelList.map((hotel:any, index:any) : any => (
-            <tr key={index} onClick ={()=>setSelectHotel(hotel.hotelId, index)}>
+            <tr key={index} onClick ={()=>setSelectHotel(hotel.hotelId)}>
                 <td>{index + 1}</td>
                 <td>{hotel.name}</td>
                 <td>{hotel.distance.value}</td>
