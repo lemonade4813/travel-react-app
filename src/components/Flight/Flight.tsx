@@ -41,6 +41,7 @@ export default function Flight(){
             departCountry : "Australia", departIataCode : "SYD", arriveCountry : "Thailand", arriveIataCode : "BKK", selectedFlightDate: new Date('2023-11-24')
             , personNumber : "1"
         })
+        alert(`"선택되었습니다. 검색 조건 ${JSON.stringify(searchFlightOption)}`)
     }
     
 
@@ -87,6 +88,8 @@ export default function Flight(){
     }),[flightResponseData])
 
 
+    console.log(flightResponseData)
+
     return(
         <>
             <p>항공권 예약 정보를 선택후 검색하세요.</p>
@@ -115,7 +118,7 @@ export default function Flight(){
                         <SelectBoxComponent 
                             htmlFor="personNumber" 
                             labelName = "탑승 인원(명)" 
-                            onChangeFunc = {changeFlightOption('personNumber')} 
+                            onChangeFunc = {() => {changeFlightOption('personNumber')}} 
                             optionValues = {["1","2","3","4","5","6"]}/>    
                         <SubmitButton type = "submit" value="검색"/>
                 </form>

@@ -72,11 +72,12 @@ const fetchHotelOffersData = (e : React.FormEvent<HTMLFormElement>) =>{
 
 const selectHotelExample = () =>{
     setSearchHotelOption({country : '프랑스', cityCode : 'PAR', radius : '5', ratings : '1'})
+    alert(`검색조건이 설정되었습니다. ${JSON.stringify(searchHotelOption)}`)
 }
 
 const selecthotelOfferExample = () => {
     setSearchHotelOfferOption({hotelId : 'MCLONGHM', adults : '1', checkInDate : new Date('2023-11-23') , checkOutDate : new Date('2023-11-24') , roomQuantity : '1' })
-
+    alert(`검색조건이 설정되었습니다. ${JSON.stringify(searchHotelOfferOption)}`)
 }
 
 console.log(searchHotelOfferOption)    
