@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { cityLists, cityCodeLists } from "../../files/CityCodeList";
 
 import { Label, Select, DivFlexColumn, DivFlexRow} from "../../utils/commonStyle";
+import SelectBoxComponent from "../../utils/SelectBoxComponent";
 
 
 const DivFlexColumnHotelSelectBox = styled(DivFlexColumn)`
@@ -14,59 +15,32 @@ const HotelSelectBox = (props : any) => {
 		<>
 			<DivFlexColumnHotelSelectBox>
 				    <DivFlexRow>
-					<Label htmlFor ="selectCountry">국가</Label>
-					<Select id ="selectCountry" onChange={props.changeCountry}>
-						<option value="">===선택하세요===</option>
-					{cityLists.sort().map((city) => (
-						<option
-							key={city}
-							value={city}
-						>
-							{city}
-						</option>
-					))}
-					</Select>
+					<SelectBoxComponent 
+                            htmlFor="selectCountry" 
+                            labelName = "국가" 
+                            onChangeFunc = {props.changeCountry} 
+                            optionValues = {cityLists.sort()}/>
 					</DivFlexRow>
 					<DivFlexRow>
-                    <Label htmlFor = "selectCity">도시</Label>
-					<Select id ="selectCity" onChange={props.changeCity}>
-						<option value="">===선택하세요===</option>
-					{cityCodeLists.filter((cityCodeList) => (cityCodeList.country === props.country)).map((city) => (
-						<option
-							key={city.cityCode}
-							value={city.cityCode}
-						>
-							{city.city}
-						</option>
-					))}
-					</Select>
-					</DivFlexRow>
-					<DivFlexRow>                
-                    <Label htmlFor = "selectRating">반경선택(km)</Label>
-					<Select id ="selectRating" onChange={props.radius}>
-                            <option>===선택하세요===</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                    </Select>
+					<SelectBoxComponent 
+                            htmlFor="selectCity" 
+                            labelName = "도시" 
+                            onChangeFunc = {props.changeCountry} 
+                            optionValues = {cityCodeLists.filter((cityCodeList) => (cityCodeList.country === props.country)).map((city)=>city.cityCode)}/>
 					</DivFlexRow>
 					<DivFlexRow>
-                    <Label htmlFor = "selectRating">호텔등급(stars)</Label>
-					<Select id ="selectRating" onChange={props.ratings}>
-                            <option>===선택하세요===</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                    </Select>
+					<SelectBoxComponent 
+                            htmlFor="selectRadius" 
+                            labelName = "반경선택(km)" 
+                            onChangeFunc = {props.radius} 
+                            optionValues = {['1','2','3','4','5','6','7','8','9','10']}/>
+					</DivFlexRow>
+					<DivFlexRow>
+					<SelectBoxComponent 
+                            htmlFor="selectRating" 
+                            labelName = "호텔등급(stars)" 
+                            onChangeFunc ={props.ratings} 
+                            optionValues = {['1','2','3','4','5']}/>	
 					</DivFlexRow>          
 				</DivFlexColumnHotelSelectBox>
 		</>

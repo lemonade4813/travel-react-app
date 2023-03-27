@@ -3,7 +3,7 @@ import { Label, Select} from "./commonStyle";
 const SelectBoxComponent = (props : {
                                     htmlFor : string,
                                     labelName : string, 
-                                    onChangeFunc : (event?: React.ChangeEvent<HTMLSelectElement>) => void, 
+                                    onChangeFunc : any, 
                                     optionValues : string[]}) => {
 const {htmlFor, labelName, onChangeFunc, optionValues} = props;
 

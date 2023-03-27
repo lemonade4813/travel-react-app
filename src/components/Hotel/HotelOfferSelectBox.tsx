@@ -24,13 +24,13 @@ const HotelOfferSelectBox = (props : any) => {
                         optionValues = {['1','2','3','4','5']}/>
                     </DivFlexRow>
                     <DatePickerComponent 
-                                name = "체크인 일자" 
-                                selectedDate={props.selectedCheckInDate} 
-                                changeDateFunc={props.changeCheckInDate}/>
+                        name = "체크인 일자" 
+                        selectedDate={props.selectedCheckInDate} 
+                        changeDateFunc={props.changeCheckInDate}/>
                     <DatePickerComponent 
-                                name = "체크아웃 일자" 
-                                selectedDate={props.selectedCheckOutDate} 
-                                changeDateFunc={props.changeCheckOutDate}/>
+                        name = "체크아웃 일자" 
+                        selectedDate={props.selectedCheckOutDate} 
+                        changeDateFunc={props.changeCheckOutDate}/>
                 </>    
     )
 }

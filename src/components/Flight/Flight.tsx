@@ -9,7 +9,7 @@ import { ko } from "date-fns/locale"
 import styled from "styled-components"
 import { dateToString } from "../../utils/etcFunc"
 import { fetchData} from "../../utils/apiCallFunc"
-import { DivFlexRow, DivDatePicker, Label, SubmitButton, Select } from "../../utils/commonStyle"
+import { DivFlexRow, DivDatePicker, Label, SubmitButton, Select, ExampleButton } from "../../utils/commonStyle"
 import SelectBoxComponent from "../../utils/SelectBoxComponent"
 import DatePickerComponent from "../../utils/DatePickerComponent"
 
@@ -34,6 +34,15 @@ export default function Flight(){
         departCountry : "", departIataCode : "", arriveCountry : "", arriveIataCode : "", selectedFlightDate: null
         , personNumber : ""
     }) 
+
+
+    const selectFlightOptionExample = () =>{
+        setSearchFlightOption({
+            departCountry : "Australia", departIataCode : "SYD", arriveCountry : "Thailand", arriveIataCode : "BKK", selectedFlightDate: new Date('2023-11-24')
+            , personNumber : "1"
+        })
+    }
+    
 
     const changeFlightOption = useCallback((key : string) => (e : React.ChangeEvent<HTMLInputElement>) => {
         setSearchFlightOption(prevState => ({...prevState, [key] : e.target.value}))
@@ -78,10 +87,10 @@ export default function Flight(){
     }),[flightResponseData])
 
 
-    console.log(searchFlightOption)
     return(
         <>
             <p>항공권 예약 정보를 선택후 검색하세요.</p>
+            <ExampleButton onClick = {selectFlightOptionExample}>검색 조건 자동 선택</ExampleButton>
             <DivFlexRowFlight>
                 <form onSubmit={fetchFlightResponseData}>
                 <p>국가/공항 선택</p>
@@ -92,8 +101,8 @@ export default function Flight(){
                             country = {searchFlightOption.departCountry}
                             depart/>
                             <FlightSelectBox
-                            changeCountry = {changeFlightOption('country')}
-                            changeIataCode = {changeFlightOption('iataCode')}
+                            changeCountry = {changeFlightOption('arriveCountry')}
+                            changeIataCode = {changeFlightOption('arriveIataCode')}
                             country = {searchFlightOption.arriveCountry} 
                             arrive/>
                         </DivFlexRow>
@@ -106,7 +115,7 @@ export default function Flight(){
                         <SelectBoxComponent 
                             htmlFor="personNumber" 
                             labelName = "탑승 인원(명)" 
-                            onChangeFunc = {() => {changeFlightOption('personNumber')}} 
+                            onChangeFunc = {changeFlightOption('personNumber')} 
                             optionValues = {["1","2","3","4","5","6"]}/>    
                         <SubmitButton type = "submit" value="검색"/>
                 </form>
