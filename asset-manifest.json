@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/travel-react-app/static/css/main.7fe5064d.css",
+    "main.js": "/travel-react-app/static/js/main.2aa07384.js",
+    "static/js/787.ef9c3e5b.chunk.js": "/travel-react-app/static/js/787.ef9c3e5b.chunk.js",
+    "static/media/NotoSansKR-Light.otf": "/travel-react-app/static/media/NotoSansKR-Light.636ff9b51e826a733c3d.otf",
+    "static/media/Gemini Moon.otf": "/travel-react-app/static/media/Gemini Moon.a9d759edca071f069e7a.otf",
+    "index.html": "/travel-react-app/index.html",
+    "main.7fe5064d.css.map": "/travel-react-app/static/css/main.7fe5064d.css.map",
+    "main.2aa07384.js.map": "/travel-react-app/static/js/main.2aa07384.js.map",
+    "787.ef9c3e5b.chunk.js.map": "/travel-react-app/static/js/787.ef9c3e5b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7fe5064d.css",
+    "static/js/main.2aa07384.js"
+  ]
+}
