@@ -1,5 +1,7 @@
 # 숙박 예약 플랫폼(React)
 
+  배포링크  : https://lemonade4813.github.io/travel-react-app/
+
 - 설치 : npm install
 
 - 실행 : npm start
