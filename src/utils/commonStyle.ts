@@ -57,6 +57,18 @@ export const SubmitButton = styled.input`
     margin-top : 10px;
 `
 
+
+
+export const PayButton = styled.input`
+    font-family: var(--font-notoSansKRLight);
+    width : 60px;
+    height : 30px;
+    background-color : #4527a0;
+    border-style : none;
+    color : #fff;
+    margin-top : 10px;
+`
+
 export const ExampleButton = styled.button`
     font-family : var(--Dovemayo_gothic);
     width : 140px;

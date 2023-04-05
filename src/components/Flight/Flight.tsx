@@ -1,18 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import FlightSelectBox from "./FlightSelectBox"
-import FlightData from "./FlightData"
-import FlightDataSegments from "./FlightDataSegments"
 import {selectFlightOptionsType} from "./type"
-import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css";
-import { ko } from "date-fns/locale"
 import styled from "styled-components"
 import { dateToString } from "../../utils/etcFunc"
 import { fetchData} from "../../utils/apiCallFunc"
-import { DivFlexRow, DivDatePicker, Label, SubmitButton, Select, ExampleButton } from "../../utils/commonStyle"
+import { DivFlexRow,SubmitButton, ExampleButton, PayButton } from "../../utils/commonStyle"
 import SelectBoxComponent from "../../utils/SelectBoxComponent"
 import DatePickerComponent from "../../utils/DatePickerComponent"
-
+import { Table, Thead, Tr } from "../../style/tableStyle"
+import { handlePayment } from "../../utils/payment"
 
 const DivFlexRowFlight = styled(DivFlexRow)`
     margin : 20px auto 0px;
@@ -20,9 +17,12 @@ const DivFlexRowFlight = styled(DivFlexRow)`
 `
 
 const FlightInfoDiv = styled(DivFlexRow)`
-
     margin : 0px auto;
     width : 90%
+`
+
+const FilghtTable = styled(Table)`
+    height : 100px;
 `
 
 export default function Flight(){
@@ -36,12 +36,16 @@ export default function Flight(){
     }) 
 
 
+    console.log(flightResponseData);
+
+
     const selectFlightOptionExample = () =>{
         setSearchFlightOption({
             departCountry : "Australia", departIataCode : "SYD", arriveCountry : "Thailand", arriveIataCode : "BKK", selectedFlightDate: new Date('2023-11-24')
             , personNumber : "1"
         })
-        alert(`"선택되었습니다. 검색 조건 ${JSON.stringify(searchFlightOption)}`)
+        alert(`선택되었습니다. 검색 조건 ${JSON.stringify(searchFlightOption)}
+        하단의 검색 버튼을 누르세요`)
     }
     
 
@@ -66,29 +70,76 @@ export default function Flight(){
         })
     }
     
-
     const flightInfo = useMemo(
         ()=>
         flightResponseData.map((response : any, index : number)=>{
 
-          const {oneWay, lastTicketingDate, numberOfBookableSeats} = response
-          const flightData = {oneWay, lastTicketingDate, numberOfBookableSeats}
-          const flightDataSegments = response.itineraries[0].segments 
-                            
+          const {oneWay, lastTicketingDate, numberOfBookableSeats, price} = response
+          const flightDataSegments = response.itineraries[0].segments                 
         return(    
             <>
-                <p>검색결과 {index+1}</p>
-                <FlightInfoDiv>
-                    <FlightData flightData = {flightData} />
-                    <FlightDataSegments flightDataSegments = {flightDataSegments} />
-                </FlightInfoDiv>    
+                <p><strong>검색결과 {index+1}</strong></p>
+                    <FlightInfoDiv>
+                        <FilghtTable>
+                            <Thead>
+                                <tr>
+                                    <th>편도여부</th>
+                                    <th>예약가능 좌석</th>
+                                    <th>예약마감일자</th>
+                                </tr>
+                            </Thead>
+                            <tbody>
+                                <tr>
+                                    {oneWay === 'true' ? <td>예</td> : <td>아니오</td> }
+                                    <td>{numberOfBookableSeats}</td>
+                                    <td>{lastTicketingDate}</td>
+                                </tr>    
+                            </tbody>
+                        </FilghtTable>
+                        <FilghtTable>
+                            <Thead>
+                                <tr>
+                                    <th>출발공항코드</th>
+                                    <th>출발시간</th>
+                                    <th>도착공항코드</th>
+                                    <th>도착시간</th>
+                                </tr>
+                            </Thead>
+                            <tbody>
+                                {flightDataSegments.map((segment:any, index:any) : any => (
+                            <tr key={index}>
+                                    <td>{segment.departure.iataCode}</td>
+                                    <td>{segment.departure.at}</td>
+                                    <td>{segment.arrival.iataCode}</td>
+                                    <td>{segment.arrival.at}</td>
+                                </tr>
+                                ))}    
+                            </tbody>
+                        </FilghtTable>
+                        <FilghtTable>
+                        <Thead>
+                            <tr>
+                                <td>통화</td>
+                                <td>기본 금액</td>    
+                                <td>총액</td>
+                            </tr>
+                        </Thead>
+                        <tbody>
+                            <tr>
+                                <td>{price.currency}</td>
+                                <td>{price.base}</td>    
+                                <td>{price.total}</td>
+                            </tr>
+                        </tbody>
+                        </FilghtTable>
+                        <div>
+                        <button onClick = {()=>handlePayment(price.currency, price.total)}>결제하기</button>
+                        </div>
+                    </FlightInfoDiv>    
             </>
         )
 
     }),[flightResponseData])
-
-
-    console.log(flightResponseData)
 
     return(
         <>

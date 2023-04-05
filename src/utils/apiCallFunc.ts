@@ -39,6 +39,8 @@ export const fetchData = async (e: React.FormEvent<HTMLFormElement>, url : strin
 
   e.preventDefault();
 
+  await setAmadeusAccessToken();
+
   const token = localStorage.getItem("amadeusAccessToken")
 
   try{
@@ -56,8 +58,7 @@ export const fetchData = async (e: React.FormEvent<HTMLFormElement>, url : strin
         if(err instanceof HTTPError)
           switch(err.statusCode){
             case 401:
-              await setAmadeusAccessToken();
-              fetchData(e, url);
+              alert("인증 오류 발생, 다시 시도해 주십시오")
               break;
             default : 
               console.log(err);

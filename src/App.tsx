@@ -3,6 +3,7 @@ import {BrowserRouter, Routes, Route, NavLink} from 'react-router-dom'
 import Flight from './components/Flight/Flight';
 import Hotel from './components/Hotel/Hotel';
 import Restaurant from './components/Restaurant/Restaurant';
+import BackGroundImage from './components/Image/BackGroundImage';
 const AppDiv= styled.div`
   font-family: var(--font-SCoreDream3Light);
   text-align : center;
@@ -63,6 +64,7 @@ function App() {
         <NavStyle to='/hotel'>호텔 예약</NavStyle>
         <NavStyle to='/restaurant'>식당 예약</NavStyle>
       </MainNav>
+      <BackGroundImage/>
       <Routes>
         <Route path='/' element={<Flight/>} />
         <Route path='/hotel' element={<Hotel/>} />
