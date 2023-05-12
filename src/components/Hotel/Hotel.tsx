@@ -9,6 +9,7 @@ import { fetchData } from "../../utils/apiCallFunc"
 import { DivFlexRow, ExampleButton, SubmitButton } from "../../utils/commonStyle"
 import { HotelOffersResponseDataSample } from "../../files/HotelOffersResponseDataSample"
 import { dateToString } from "../../utils/etcFunc"
+import { addHotel } from "../../features/counter/counterSlice";
 
 
 const DivHotelSelectBox = styled(DivFlexRow)`

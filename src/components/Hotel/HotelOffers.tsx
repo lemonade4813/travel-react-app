@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import {Table, Thead} from "../../style/tableStyle"
-
+import { addHotel } from "../../features/counter/counterSlice"
+import { useDispatch } from "react-redux"
 
 const HotelOffersTable = styled(Table)`
-
 
 & > tbody tr:nth-child(2n+1){
     background-color : #f0f0f0;
@@ -11,6 +11,8 @@ const HotelOffersTable = styled(Table)`
 `
 
 const HotelOffers = ({hotelOffers} : any) => {
+
+    const dispatch = useDispatch();
 
     const {hotel, offers} = hotelOffers
 
@@ -62,7 +64,6 @@ const HotelOffers = ({hotelOffers} : any) => {
             </Thead>
                 <tbody>
                 {offers.map((offer : any, index : any) => 
-                
                 (
                 <tr key ={offer.id}>
                     <td>{index + 1}</td>
@@ -80,6 +81,7 @@ const HotelOffers = ({hotelOffers} : any) => {
                     <td>{offer.price.base}</td>
                     <td>{offer.price.total}</td>
                     <td>{offer.price.currency}</td>
+                    {/* <td onClick = {()=>dispatch(addHotel(cartPayload))}>카트 담기</td> */}
                 </tr>
             ))}
             </tbody>
@@ -87,7 +89,6 @@ const HotelOffers = ({hotelOffers} : any) => {
         </>)}
         </div>
     )
-
 }
 
 export default HotelOffers
