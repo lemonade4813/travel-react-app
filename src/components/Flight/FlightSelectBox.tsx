@@ -6,7 +6,6 @@ import SelectBoxComponent from "../../utils/SelectBoxComponent";
 
 const flightSelectBox = (props : any) => {
 
-
 let selectType;
 
 	props.depart ? selectType = '출발' : selectType = '도착'

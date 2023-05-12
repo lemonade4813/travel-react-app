@@ -5,11 +5,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components"
 import { dateToString } from "../../utils/etcFunc"
 import { fetchData} from "../../utils/apiCallFunc"
-import { DivFlexRow,SubmitButton, ExampleButton, PayButton } from "../../utils/commonStyle"
+import { DivFlexRow,SubmitButton, ExampleButton} from "../../utils/commonStyle"
 import SelectBoxComponent from "../../utils/SelectBoxComponent"
 import DatePickerComponent from "../../utils/DatePickerComponent"
-import { Table, Thead, Tr } from "../../style/tableStyle"
+import { Table, Thead} from "../../style/tableStyle"
 import { handlePayment } from "../../utils/payment"
+import { useDispatch } from "react-redux";
+import { addFlight} from "../../features/counter/counterSlice";
+
 
 const DivFlexRowFlight = styled(DivFlexRow)`
     margin : 20px auto 0px;
@@ -26,6 +29,8 @@ const FilghtTable = styled(Table)`
 `
 
 export default function Flight(){
+
+    const dispatch = useDispatch();
 
     const[flightResponseData, setFlightResponseData] = useState<any>([])
 
@@ -75,7 +80,8 @@ export default function Flight(){
         flightResponseData.map((response : any, index : number)=>{
 
           const {oneWay, lastTicketingDate, numberOfBookableSeats, price} = response
-          const flightDataSegments = response.itineraries[0].segments                 
+          const flightDataSegments = response.itineraries[0].segments
+          const cartPayload = {oneWay, lastTicketingDate, numberOfBookableSeats, price, flightDataSegments}                 
         return(    
             <>
                 <p><strong>검색결과 {index+1}</strong></p>
@@ -133,13 +139,14 @@ export default function Flight(){
                         </tbody>
                         </FilghtTable>
                         <div>
-                        <button onClick = {()=>handlePayment(price.currency, price.total)}>결제하기</button>
+                            <button onClick = {()=>handlePayment(price.currency, price.total)}>결제하기</button>
+                            <button onClick = {()=>dispatch(addFlight(cartPayload))}>카트 담기</button>
                         </div>
                     </FlightInfoDiv>    
             </>
         )
 
-    }),[flightResponseData])
+    }),[flightResponseData, dispatch])
 
     return(
         <>
